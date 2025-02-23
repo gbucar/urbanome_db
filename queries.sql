@@ -14,6 +14,22 @@ where
         and nncr.duration_seconds > 20
     );
 
+create table noisecapture_nocar_record_view as
+SELECT
+    *
+FROM
+    public.noisecapture_raw_record nrr
+where
+    not exists (
+        select
+            1
+        from
+            public.noisecapture_raw_point nrp
+        where
+            (nrr.record_uuid = nrp.record_uuid)
+            and (nrp.speed > 11)
+    );
+
 create table agg.noisecapture_nostatic_record as
 SELECT
     *
